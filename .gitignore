@@ -4,3 +4,4 @@
 vault-pass.txt
 .env
 *.env
+.DS_Store
