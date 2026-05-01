@@ -1,0 +1,27 @@
+nfs:
+  server: 192.168.1.196
+
+  mounts:
+    - name: media
+      src: /mnt/Data/Media
+      path: /mnt/data/media
+
+#    - name: downloads
+#      src: /mnt/Data/downloads
+#      path: /mnt/data/downloads
+#
+#    - name: youtube
+#      src: /mnt/Data/youtube
+#      path: /mnt/data/youtube
+#
+#    - name: audiobooks
+#      src: /mnt/Data/audiobooks
+#      path: /mnt/data/audiobooks
+
+env_files:
+  network:
+    TZ: Australia/Brisbane
+    WEBPASSWORD: "{{ vault_pihole_webpassword }}"
+    PIHOLE_DNS_: "unbound#5335"
+    DNSSEC: "true"
+    REV_SERVER: "false"

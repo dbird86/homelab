@@ -1,0 +1,6 @@
+timezone: Australia/Brisbane
+docker_user: daniel
+docker_base_dir: /opt/docker
+compose_base_dir: /opt/compose
+data_mount_root: /mnt/data
+docker_env_dir: /opt/docker/env

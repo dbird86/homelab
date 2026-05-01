@@ -1,0 +1,20 @@
+- name: Ensure env directory exists
+  file:
+    path: "{{ docker_env_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Write stack env files
+  copy:
+    dest: "{{ docker_env_dir }}/{{ item.key }}.env"
+    owner: root
+    group: root
+    mode: "0640"
+    content: |
+      {% for key, value in item.value.items() %}
+      {{ key }}={{ value }}
+      {% endfor %}
+  loop: "{{ env_files | default({}) | dict2items }}"
+  no_log: true

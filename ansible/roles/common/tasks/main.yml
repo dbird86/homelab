@@ -1,0 +1,46 @@
+- name: Set timezone
+  community.general.timezone:
+    name: "{{ timezone }}"
+
+- name: Install base packages
+  apt:
+    name:
+      - curl
+      - wget
+      - git
+      - vim
+      - htop
+      - btop
+      - ca-certificates
+      - gnupg
+      - lsb-release
+      - qemu-guest-agent
+      - nfs-common
+    state: present
+    update_cache: true
+
+- name: Install qemu guest agent on VMs only
+  ansible.builtin.apt:
+    name: qemu-guest-agent
+    state: present
+    update_cache: true
+  when: ansible_facts.virtualization_role == "guest"
+
+- name: Start and enable qemu guest agent on VMs only
+  ansible.builtin.service:
+    name: qemu-guest-agent
+    state: started
+    enabled: true
+  when: ansible_facts.virtualization_role == "guest"
+
+- name: Create docker base dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ docker_base_dir }}"
+    - "{{ docker_base_dir }}/env"
+    - "{{ docker_base_dir }}/env/secrets"
+    - "{{ docker_base_dir }}/volumes"
+    - "{{ compose_base_dir }}"

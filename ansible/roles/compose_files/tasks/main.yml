@@ -1,0 +1,45 @@
+- name: Create compose project directories
+  file:
+    path: "{{ compose_base_dir }}/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ compose_projects }}"
+
+- name: Copy compose project files
+  copy:
+    src: "../../../compose/{{ inventory_hostname }}/{{ item }}/"
+    dest: "{{ compose_base_dir }}/{{ item }}/"
+    mode: preserve
+  loop: "{{ compose_projects }}"
+
+- name: Copy global env
+  copy:
+    dest: "{{ docker_base_dir }}/env/global.env"
+    mode: "0640"
+    content: |
+      TZ=Australia/Brisbane
+      PUID=1000
+      PGID=1000
+      UMASK=002
+
+- name: Write media env for GPU node
+  copy:
+    dest: "{{ docker_base_dir }}/env/media.env"
+    mode: "0640"
+    content: |
+      MEDIA_ROOT=/mnt/data/media
+      DOWNLOADS_ROOT=/mnt/data/downloads
+      YOUTUBE_ROOT=/mnt/data/youtube
+      AUDIOBOOKS_ROOT=/mnt/data/audiobooks
+  when: "'gpu' in group_names"
+
+- name: Write apps env for apps node
+  copy:
+    dest: "{{ docker_base_dir }}/env/apps.env"
+    mode: "0640"
+    content: |
+      PHOTOS_ROOT=/mnt/data/photos
+      DOCUMENTS_ROOT=/mnt/data/documents
+      BUDGET_ROOT=/mnt/data/budget
+      LOCATION_ROOT=/mnt/data/location-history
+  when: "'apps' in group_names"      

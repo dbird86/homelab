@@ -1,0 +1,9 @@
+- name: Configure all docker hosts
+  hosts: docker_hosts
+  become: true
+  roles:
+    - common
+    - docker
+    - mounts
+    - compose_files
+    - env_files

@@ -1,0 +1,11 @@
+compose_projects:
+  - media
+  - ai
+  - archive
+  - frigate
+
+required_mounts:
+  - /mnt/data/media
+  - /mnt/data/downloads
+  - /mnt/data/youtube
+  - /mnt/data/audiobooks

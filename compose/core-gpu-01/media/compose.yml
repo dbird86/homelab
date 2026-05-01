@@ -1,0 +1,92 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/media.env
+
+    ports:
+      - "8096:8096"
+
+    volumes:
+      - /opt/docker/data/jellyfin/config:/config
+      - /opt/docker/data/jellyfin/cache:/cache
+      - ${MEDIA_ROOT}:/media:ro
+
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    restart: unless-stopped
+
+    ports:
+      - "13378:80"
+
+    volumes:
+      - /opt/docker/data/audiobookshelf/config:/config
+      - /opt/docker/data/audiobookshelf/metadata:/metadata
+      - ${AUDIOBOOKS_ROOT}:/audiobooks
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/media.env
+
+    ports:
+      - "8081:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+
+    volumes:
+      - /opt/docker/data/qbittorrent:/config
+      - ${DOWNLOADS_ROOT}:/downloads
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/media.env
+
+    ports:
+      - "9696:9696"
+
+    volumes:
+      - /opt/docker/data/prowlarr:/config
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/media.env
+
+    ports:
+      - "8989:8989"
+
+    volumes:
+      - /opt/docker/data/sonarr:/config
+      - ${MEDIA_ROOT}:/media
+      - ${DOWNLOADS_ROOT}:/downloads
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/media.env
+
+    ports:
+      - "7878:7878"
+
+    volumes:
+      - /opt/docker/data/radarr:/config
+      - ${MEDIA_ROOT}:/media
+      - ${DOWNLOADS_ROOT}:/downloads

@@ -1,0 +1,14 @@
+compose_projects:
+  - network
+  #- proxy
+  #- dashboard
+  - monitoring
+  #- immich
+  #- paperless
+  #- household
+
+required_mounts:
+  - /mnt/data/photos
+  - /mnt/data/documents
+  - /mnt/data/budget
+  - /mnt/data/location-history

@@ -1,0 +1,26 @@
+services:
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    restart: unless-stopped
+    privileged: true
+
+    shm_size: "512mb"
+
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+      - /dev/dri:/dev/dri
+
+    ports:
+      - "5000:5000"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /opt/docker/data/frigate/config:/config
+      - /mnt/data/frigate:/media/frigate
+
+    environment:
+      FRIGATE_RTSP_PASSWORD: "change_me"

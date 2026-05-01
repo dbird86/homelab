@@ -1,0 +1,37 @@
+nfs:
+  server: 192.168.1.196
+
+  mounts:
+    - name: photos
+      src: /mnt/Data/Photos
+      path: /mnt/data/photos
+
+    - name: documents
+      src: /mnt/Data/documents
+      path: /mnt/data/documents
+
+    - name: budget
+      src: /mnt/Data/budget
+      path: /mnt/data/budget
+
+    - name: location-history
+      src: /mnt/Data/location-history
+      path: /mnt/data/location-history
+
+env_files:
+  media:
+    TZ: Australia/Brisbane
+    PUID: "1000"
+    PGID: "1000"
+    MEDIA_ROOT: /mnt/data/media
+    DOWNLOADS_ROOT: /mnt/data/downloads
+    AUDIOBOOKS_ROOT: /mnt/data/audiobooks
+
+  frigate:
+    TZ: Australia/Brisbane
+    FRIGATE_RTSP_PASSWORD: "{{ vault_frigate_rtsp_password }}"
+    MQTT_PASSWORD: "{{ vault_mqtt_password }}"
+
+  ai:
+    TZ: Australia/Brisbane
+    WEBUI_SECRET_KEY: "{{ vault_openwebui_secret_key }}"      

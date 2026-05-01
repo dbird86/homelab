@@ -1,0 +1,32 @@
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+
+    env_file:
+      - /opt/docker/env/network.env
+
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "80:80/tcp"
+
+    volumes:
+      - /opt/docker/data/pihole/etc-pihole:/etc/pihole
+      - /opt/docker/data/pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+
+    depends_on:
+      - unbound
+
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    restart: unless-stopped
+
+    volumes:
+      - /opt/docker/data/unbound:/opt/unbound/etc/unbound

@@ -1,0 +1,82 @@
+---
+- name: Install NFS client packages
+  ansible.builtin.apt:
+    name: nfs-common
+    state: present
+    update_cache: true
+
+- name: Ensure base mount directory exists
+  ansible.builtin.file:
+    path: /mnt/data
+    state: directory
+    mode: "0755"
+
+- name: Check existing mount directories
+  ansible.builtin.stat:
+    path: "{{ item.path }}"
+  loop: "{{ nfs.mounts | default([]) }}"
+  register: mount_dirs
+
+- name: Create required NFS mount directories if missing
+  ansible.builtin.file:
+    path: "{{ item.item.path }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ mount_dirs.results }}"
+  when: not item.stat.exists
+
+- name: Mount required NFS shares
+  ansible.posix.mount:
+    path: "{{ item.path }}"
+    src: "{{ nfs.server }}:{{ item.src }}"
+    fstype: nfs
+    opts: "{{ item.opts | default('defaults,_netdev') }}"
+    state: mounted
+  loop: "{{ nfs.mounts | default([]) }}"
+
+#- name: Create Grafana data dir
+#  file:
+#    path: /opt/docker/grafana/data
+#    state: directory
+#    owner: 472
+#    group: 472
+#    mode: '0755'
+#  when: "'apps' in group_names"
+
+- name: Create Grafana data directory
+  ansible.builtin.file:
+    path: /opt/docker/grafana/data
+    state: directory
+    owner: "472"
+    group: "472"
+    mode: "0755"
+  when: "'apps' in group_names"    
+
+- name: Create Prometheus config directory
+  file:
+    path: /opt/docker/prometheus
+    state: directory
+    mode: '0755'
+
+- name: Create Prometheus data directory
+  ansible.builtin.file:
+    path: /opt/docker/prometheus/data
+    state: directory
+    owner: "65534"
+    group: "65534"
+    mode: "0755"    
+
+- name: Install Prometheus config
+  copy:
+    dest: /opt/docker/prometheus/prometheus.yml
+    content: |
+      global:
+        scrape_interval: 15s
+
+      scrape_configs:
+        - job_name: cadvisor
+          static_configs:
+            - targets:
+                - cadvisor:8080
+    mode: '0644'
+  when: "'apps' in group_names"    
