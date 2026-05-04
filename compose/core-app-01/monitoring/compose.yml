@@ -50,10 +50,9 @@ services:
       - /opt/docker/env/host.env
 
     volumes:
-      - ${DOCKER_APPDATA}/prometheus:/prometheus
-      - /opt/docker/config/prometheus:/etc/prometheus
-      - ${DOCKER_APPDATA}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ${DOCKER_APPDATA}/prometheus/data:/prometheus/data      
+      - ${DOCKER_CONFIG}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${DOCKER_APPDATA}/prometheus:/prometheus 
+      
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus/data        

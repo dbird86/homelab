@@ -1,14 +1,19 @@
 - name: Deploy compose stacks
   hosts: docker_hosts
+
   tasks:
     - name: Pull latest images
       community.docker.docker_compose_v2:
         project_src: "{{ compose_base_dir }}/{{ item }}"
+        env_files:
+          - /opt/docker/env/host.env
         pull: always
       loop: "{{ compose_projects }}"
 
     - name: Bring stacks up
       community.docker.docker_compose_v2:
         project_src: "{{ compose_base_dir }}/{{ item }}"
+        env_files:
+          - /opt/docker/env/host.env
         state: present
       loop: "{{ compose_projects }}"
