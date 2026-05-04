@@ -6,6 +6,7 @@ services:
 
     env_file:
       - /opt/docker/env/network.env
+      - /opt/docker/env/host.env      
 
     ports:
       - "53:53/tcp"
@@ -13,8 +14,8 @@ services:
       - "80:80/tcp"
 
     volumes:
-      - /opt/docker/data/pihole/etc-pihole:/etc/pihole
-      - /opt/docker/data/pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+      - ${DOCKER_APPDATA}pihole:/etc/pihole
+      - ${DOCKER_APPDATA}pihole/etc-dnsmasq.d:/etc/dnsmasq.d
 
     dns:
       - 127.0.0.1

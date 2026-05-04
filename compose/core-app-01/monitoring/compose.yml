@@ -4,11 +4,14 @@ services:
     container_name: uptime-kuma
     restart: unless-stopped
 
+    env_file:
+      - /opt/docker/env/host.env
+
     ports:
       - "3001:3001"
 
     volumes:
-      - /opt/docker/data/uptime-kuma:/app/data
+      - ${DOCKER_APPDATA}/uptime-kuma:/app/data
 
   dozzle:
     image: amir20/dozzle:latest
@@ -43,11 +46,14 @@ services:
     ports:
       - "9090:9090"
 
+    env_file:
+      - /opt/docker/env/host.env
+
     volumes:
-      - /opt/docker/data/prometheus:/prometheus
+      - ${DOCKER_APPDATA}/prometheus:/prometheus
       - /opt/docker/config/prometheus:/etc/prometheus
-      - /opt/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - /opt/docker/prometheus/data:/prometheus/data      
+      - ${DOCKER_APPDATA}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${DOCKER_APPDATA}/prometheus/data:/prometheus/data      
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus/data        
@@ -60,5 +66,8 @@ services:
     ports:
       - "3002:3000"
 
+    env_file:
+      - /opt/docker/env/host.env
+
     volumes:
-      - /opt/docker/grafana/data:/var/lib/grafana      
+      - ${DOCKER_APPDATA}/grafana:/var/lib/grafana      

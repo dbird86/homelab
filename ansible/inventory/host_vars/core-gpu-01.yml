@@ -34,4 +34,9 @@ env_files:
 
   ai:
     TZ: Australia/Brisbane
-    WEBUI_SECRET_KEY: "{{ vault_openwebui_secret_key }}"      
+    WEBUI_SECRET_KEY: "{{ vault_openwebui_secret_key }}"
+
+docker_env:
+  DOCKER_APPDATA: /opt/docker/appdata
+  DOCKER_CONFIG: /opt/docker/config
+  DOCKER_ENV: /opt/docker/env    

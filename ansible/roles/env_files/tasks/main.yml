@@ -6,6 +6,15 @@
     group: root
     mode: "0750"
 
+- name: Create per-host Docker env file
+  ansible.builtin.copy:
+    dest: /opt/docker/env/host.env
+    mode: '0644'
+    content: |
+      {% for key, value in docker_env.items() %}
+      {{ key }}={{ value }}
+      {% endfor %}
+
 - name: Write stack env files
   copy:
     dest: "{{ docker_env_dir }}/{{ item.key }}.env"

@@ -1,7 +1,7 @@
-.retry
-*.log
+.DS_Store
+**/.DS_Store
+*.env
 .vault-pass
 vault-pass.txt
-.env
-*.env
-.DS_Store
+*.retry
+*.log
